@@ -1,0 +1,4 @@
+src/caffe/net.cpp:8:10: fatal error: hdf5.h: No such file or directory
+    8 | #include "hdf5.h"
+      |          ^~~~~~~~
+compilation terminated.

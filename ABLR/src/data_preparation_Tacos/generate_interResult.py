@@ -37,9 +37,9 @@ def generate_split():
     
 
     np.savez(save_split_path, train = list(set(train_list)), test = list(set(test_list)), val = list(set(val_list)) ) 
-    print len(list(set(train_list)))
-    print len(list(set(test_list)))
-    print len(list(set(val_list)))
+    print(len(list(set(train_list))))
+    print(len(list(set(test_list))))
+    print(len(list(set(val_list))))
 
 
 def generate_caption_json(datasplit):
@@ -59,7 +59,7 @@ def generate_caption_json(datasplit):
         video_dict = {}
         video_path = video_dir_path + video
         frame_num,fps = get_total_frame_number(video_path)
-        print fps
+        print(fps)
         video_dict['duration'] = frame_num
         file = open(video_sentence_index_path+video.split('.')[0]+'.sentences.tsv','r')
         lines = file.readlines()
@@ -80,7 +80,7 @@ def generate_caption_json(datasplit):
 
     f = open(output_json,"w")
     json.dump(output_dict,f)
-    print 'dump!'
+    print('dump!')
 
 
 if __name__ == '__main__':

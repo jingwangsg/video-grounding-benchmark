@@ -50,7 +50,7 @@ def filter_glove_embedding(word_dict, glove_path, dim):
     return np.asarray(vectors)
 
 
-def load_video_features(root, max_position_length):
+def load_video_features_(root, max_position_length):
     video_features = dict()
     filenames = glob.glob(os.path.join(root, "*.npy"))
 
@@ -65,6 +65,26 @@ def load_video_features(root, max_position_length):
             new_feature = visual_feature_sampling(feature, max_num_clips=max_position_length)
             video_features[video_id] = new_feature
 
+    return video_features
+
+def load_video_features(max_position_length):
+    video_features = dict()
+    import os
+    import h5py
+    _pjoin = os.path.join
+
+    tacos_dir = "/export/home2/kningtg/DATASET/2DTAN_benchmark/TACoS"
+    c3d_feat_hdf5 = _pjoin(tacos_dir, "tacos_c3d_fc6_nonoverlap.hdf5")
+    f = h5py.File(c3d_feat_hdf5, "r")
+
+    for video_id in f.keys():
+        feature = np.array(f[video_id])
+        if max_position_length is None:
+            video_features[video_id] = feature
+        else:
+            new_feature = visual_feature_sampling(feature, max_num_clips=max_position_length)
+            video_features[video_id] = new_feature
+    
     return video_features
 
 

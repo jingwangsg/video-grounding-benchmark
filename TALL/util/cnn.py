@@ -15,7 +15,7 @@ def conv_layer(name, bottom, kernel_size, stride, output_dim, padding='SAME',
                 weights_initializer = tf.random_normal_initializer(mean=0.0, stddev=0.01)
             if bias_term and biases_initializer is None:
               biases_initializer = tf.constant_initializer(0.)
-            print "input_dim"+str(input_dim)
+            print("input_dim"+str(input_dim))
             # filter has shape [filter_height, filter_width, in_channels, out_channels]
             weights = tf.get_variable("weights",
                 [kernel_size, kernel_size, input_dim, output_dim],
@@ -23,9 +23,9 @@ def conv_layer(name, bottom, kernel_size, stride, output_dim, padding='SAME',
             if bias_term:
                 biases = tf.get_variable("biases", output_dim,
                     initializer=biases_initializer)
-            print str(weights.name)+" initialized as random or retrieved from graph"
+            print(str(weights.name)+" initialized as random or retrieved from graph")
             if bias_term:
-                print biases.name+" initialized as random or retrieved from graph"
+                print(biases.name+" initialized as random or retrieved from graph")
 
         else:
             weights = tf.get_variable("weights",
@@ -35,9 +35,9 @@ def conv_layer(name, bottom, kernel_size, stride, output_dim, padding='SAME',
                 biases = tf.get_variable("biases", shape=None,
                     initializer=biases_initializer) 
 
-            print weights.name+" initialized from pre-trained parameters or retrieved from graph"
+            print(weights.name+" initialized from pre-trained parameters or retrieved from graph")
             if bias_term:
-                print biases.name+" initialized from pre-trained parameters or retrieved from graph"
+                print(biases.name+" initialized from pre-trained parameters or retrieved from graph")
 
 
     conv = tf.nn.conv2d(bottom, filter=weights,
@@ -121,9 +121,9 @@ def fc_layer(name, bottom, output_dim, bias_term=True, weights_initializer=None,
                 biases = tf.get_variable("biases", output_dim,
                     initializer=biases_initializer)
 
-            print weights.name+" initialized as random or retrieved from graph"
+            print(weights.name+" initialized as random or retrieved from graph")
             if bias_term:
-                print biases.name+" initialized as random or retrieved from graph"
+                print(biases.name+" initialized as random or retrieved from graph")
         else:
             weights = tf.get_variable("weights", shape=None,
                 initializer=weights_initializer)
@@ -131,9 +131,9 @@ def fc_layer(name, bottom, output_dim, bias_term=True, weights_initializer=None,
                 biases = tf.get_variable("biases", shape=None,
                     initializer=biases_initializer)
 
-            print weights.name+" initialized from pre-trained parameters or retrieved from graph"
+            print(weights.name+" initialized from pre-trained parameters or retrieved from graph")
             if bias_term:
-                print biases.name+" initialized from pre-trained parameters or retrieved from graph"
+                print(biases.name+" initialized from pre-trained parameters or retrieved from graph")
 
     if bias_term:
         fc = tf.nn.xw_plus_b(flat_bottom, weights, biases)

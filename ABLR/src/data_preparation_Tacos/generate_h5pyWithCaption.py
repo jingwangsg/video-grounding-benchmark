@@ -43,8 +43,8 @@ def trans_video_youtube(datasplit):
     norm_timestamps = []
     
     for ele in List:
-        print ele
-        print initial
+        print(ele)
+        print(initial)
         train_batch = h5py.File(ele)
         for idx, video in enumerate(train_batch['title']):
             if video in merge_j.keys():

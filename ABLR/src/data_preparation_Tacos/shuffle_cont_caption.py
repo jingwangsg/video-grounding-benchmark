@@ -37,7 +37,7 @@ for part_list in h5py_part_list:
 
 
     for idx, item in enumerate(part_list):
-        print item
+        print(item)
         current_batch = h5py.File(item)
         current_fname = current_batch['fname']
         current_title = current_batch['title']
@@ -75,7 +75,7 @@ for part_list in h5py_part_list:
         batch['duration'] = duration[idx*100:(idx+1)*100]
         batch['norm_timestamps'] = norm_timestamps[idx*100:(idx+1)*100]
         count = count + 1
-        print count
+        print(count)
 
 
 

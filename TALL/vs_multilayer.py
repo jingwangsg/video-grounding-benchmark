@@ -14,10 +14,10 @@ from util.cnn import fc_relu_layer as fc_relu
 def vs_multilayer(input_batch,name,middle_layer_dim=1000,reuse=False):
     with tf.variable_scope(name):
         if reuse==True:
-            print name+" reuse variables"
+            print(name+" reuse variables")
             tf.get_variable_scope().reuse_variables()
         else:
-            print name+" doesn't reuse variables"
+            print(name+" doesn't reuse variables")
 
         layer1 = conv_relu('layer1', input_batch,
                         kernel_size=1,stride=1,output_dim=middle_layer_dim)

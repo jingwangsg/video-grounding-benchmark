@@ -1,0 +1,4 @@
+.Downloads
+**/*.pkl
+**/__pycache__
+**/glove*

@@ -1,0 +1,4 @@
+src/caffe/internal_thread.cpp:1:10: fatal error: boost/thread.hpp: No such file or directory
+    1 | #include <boost/thread.hpp>
+      |          ^~~~~~~~~~~~~~~~~~
+compilation terminated.

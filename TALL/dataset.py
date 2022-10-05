@@ -31,9 +31,10 @@ class TrainingDataSet(object):
         self.batch_size = batch_size
         self.context_num = 1
         self.context_size = 128
-        print "Reading training data list from "+it_path
-        cs = pickle.load(open(it_path))
-        movie_length_info = pickle.load(open("./video_allframes_info.pkl"))
+        print("Reading training data list from "+it_path)
+        cs = pickle.load(open(it_path, "rb"), encoding='latin1')
+        # https://stackoverflow.com/questions/11305790/pickle-incompatibility-of-numpy-arrays-between-python-2-and-3
+        movie_length_info = pickle.load(open("./video_allframes_info.pkl", "rb"), encoding="latin1")
         self.clip_sentence_pairs = []
         for l in cs:
             clip_name = l[0]
@@ -56,7 +57,7 @@ class TrainingDataSet(object):
         self.sent_vec_dim = 4800
         self.num_samples = len(self.clip_sentence_pairs)
         self.sliding_clip_path = sliding_dir
-        print str(len(self.clip_sentence_pairs))+" clip-sentence pairs are readed"
+        print(str(len(self.clip_sentence_pairs))+" clip-sentence pairs are readed")
         
         # read sliding windows, and match them with the groundtruths to make training samples
         sliding_clips_tmp = os.listdir(self.sliding_clip_path)
@@ -81,7 +82,7 @@ class TrainingDataSet(object):
                                 end_offset = o_end-end
                                 self.clip_sentence_pairs_iou.append((clip_sentence[0], clip_sentence[1], clip_name, start_offset, end_offset))
         self.num_samples_iou = len(self.clip_sentence_pairs_iou)
-        print str(len(self.clip_sentence_pairs_iou))+" iou clip-sentence pairs are readed"
+        print(str(len(self.clip_sentence_pairs_iou))+" iou clip-sentence pairs are readed")
        
     
     '''
@@ -188,16 +189,16 @@ class TestingDataSet(object):
         #self.epochs_completed = 0
         self.batch_size = batch_size
         self.image_dir = img_dir
-        print "Reading testing data list from "+csv_path
+        print("Reading testing data list from "+csv_path)
         self.semantic_size = 4800
-        csv = pickle.load(open(csv_path))
+        csv = pickle.load(open(csv_path, "rb"), encoding="latin1")
         self.clip_sentence_pairs = []
         for l in csv:
             clip_name = l[0]
             sent_vecs = l[1]
             for sent_vec in sent_vecs:
                 self.clip_sentence_pairs.append((clip_name, sent_vec))
-        print str(len(self.clip_sentence_pairs))+" pairs are readed"
+        print(str(len(self.clip_sentence_pairs))+" pairs are readed")
         movie_names_set = set()
         self.movie_clip_names = {}
         for k in range(len(self.clip_sentence_pairs)):
@@ -212,7 +213,7 @@ class TestingDataSet(object):
         self.clip_num_per_movie_max = 0
         for movie_name in self.movie_clip_names:
             if len(self.movie_clip_names[movie_name])>self.clip_num_per_movie_max: self.clip_num_per_movie_max = len(self.movie_clip_names[movie_name])
-        print "Max number of clips in a movie is "+str(self.clip_num_per_movie_max)
+        print("Max number of clips in a movie is "+str(self.clip_num_per_movie_max))
         
         self.sliding_clip_path = img_dir
         sliding_clips_tmp = os.listdir(self.sliding_clip_path)
@@ -223,7 +224,7 @@ class TestingDataSet(object):
                 if movie_name in self.movie_clip_names:
                     self.sliding_clip_names.append(clip_name.split(".")[0]+"."+clip_name.split(".")[1])
         self.num_samples = len(self.clip_sentence_pairs)
-        print "sliding clips number: "+str(len(self.sliding_clip_names))
+        print("sliding clips number: "+str(len(self.sliding_clip_names)))
         assert self.batch_size <= self.num_samples
         
 

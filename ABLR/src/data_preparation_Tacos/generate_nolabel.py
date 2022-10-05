@@ -3,6 +3,7 @@ import cv2
 import json
 import pdb
 import numpy as np
+import sys
 
 video_path = '/Tacos/videos'
 output_path = '../../data/Tacos/middle-labels/'
@@ -19,10 +20,10 @@ def splitdata(path, train_num, val_num):
     for ele in lst:
         name.append(os.path.splitext(ele)[0])
 
-    print len(name)
-    print name[0:100]
+    print(len(name))
+    print(name[0:100])
     name = np.random.permutation(name)
-    print name[0:100]
+    print(name[0:100])
 
     train = name[0:train_num]
     val = name[train_num:train_num+val_num]
@@ -33,7 +34,7 @@ def splitdata(path, train_num, val_num):
 def get_total_frame_number(fn):
     cap = cv2.VideoCapture(fn)
     if not cap.isOpened():
-        print "could not open :",fn
+        print("could not open :",fn)
         sys.exit() 
     length = float(cap.get(cv2.cv.CV_CAP_PROP_FRAME_COUNT))
     fps = cap.get(cv2.cv.CV_CAP_PROP_FPS)
@@ -54,7 +55,7 @@ def get_frame_list(frame_num,seg_num):
     clip_per_seg = float(num_clip8/seg_num)
 
     if num_clip8 <= 0:
-        print 'amazing !!'
+        print('amazing !!')
 
     seg_left = np.zeros(seg_num)
     seg_right = np.zeros(seg_num)
@@ -75,7 +76,7 @@ def get_frame_list(frame_num,seg_num):
 def get_label_list(fname):
     
     frame_len,fps = get_total_frame_number(fname)
-    print frame_len
+    print(frame_len)
     frame_list = get_frame_list(frame_len,seg_num)
     if frame_list == -1:
         return
@@ -84,7 +85,7 @@ def get_label_list(fname):
     fname = fname.split('/')[-1].split('.')[0]
     outfile = output_path+str(fname)+'.json'
     if not os.path.isfile(outfile):
-    	json.dump([frame_list, label_list], open(outfile,"w"))
+        json.dump([frame_list, label_list], open(outfile,"w"))
 
 if __name__=='__main__':
     b = getlist(video_path)
@@ -92,9 +93,8 @@ if __name__=='__main__':
     for ele in b:
         fname = ele
         if not os.path.isfile(output_path+str(fname)+'.json'):
-            print fname
+            print(fname)
             get_label_list(fname)
         count += 1
-    print len(b)
-    print count
-
+    print(len(b))
+    print(count)

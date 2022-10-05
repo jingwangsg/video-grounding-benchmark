@@ -48,7 +48,7 @@ def generate_dataset(data, feature_shapes, word_dict, char_dict, scope):
     for record in tqdm(data, total=len(data), desc="process {} data".format(scope)):
         video_id, start_time, end_time, duration, words = record
         # video_id = video_id + '.avi'
-        video_id = video_id 
+        video_id = video_id
         feature_shape = feature_shapes[video_id]
 
         # compute best start and end indices
@@ -62,9 +62,17 @@ def generate_dataset(data, feature_shapes, word_dict, char_dict, scope):
             word_indices.append(word_index)
             char_indices.append(char_index)
 
-        example = {"video_id": str(video_id), "start_time": float(start_time), "end_time": float(end_time),
-                   "duration": float(duration), "start_index": int(start_index), "end_index": int(end_index),
-                   "feature_shape": int(feature_shape), "word_ids": word_indices, "char_ids": char_indices}
+        example = {
+            "video_id": str(video_id),
+            "start_time": float(start_time),
+            "end_time": float(end_time),
+            "duration": float(duration),
+            "start_index": int(start_index),
+            "end_index": int(end_index),
+            "feature_shape": int(feature_shape),
+            "word_ids": word_indices,
+            "char_ids": char_indices,
+        }
         dataset.append(example)
 
     return dataset
@@ -79,7 +87,9 @@ def prepro_tacos(configs):
     train_data, val_data, test_data = read_tacos_data(configs.root, configs.max_position_length)
 
     # load features and sample feature shapes if possible
-    features_path = os.path.join(configs.root, "tacos_features_{}/feature_shapes.json".format(configs.feature))
+    features_path = os.path.join(
+        configs.root, "tacos_features_{}/feature_shapes.json".format(configs.feature)
+    )
     feature_shapes = dict()
     for vid, length in load_json(features_path).items():
         if configs.max_position_length is not None and length > configs.max_position_length:

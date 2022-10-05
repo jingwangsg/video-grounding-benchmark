@@ -1,5 +1,5 @@
 import numpy as np
-import os, json, h5py, math, pdb, glob
+import os, json, h5py, math, pdb, glob, sys
 
 
 MAX_LEN = 256
@@ -17,7 +17,7 @@ def get_max_len(path):
         for ele in files:
             if ele.endswith('json'):
                 lst.append(root+'/'+ele)
-    print lst
+    print(lst)
     cnt = []
     for ele in lst:
         a = json.load(open(ele))
@@ -38,7 +38,7 @@ def read_c3d(fn):
 def get_c3d(f_path,ftype):
     v = []
     if not os.path.exists(f_path):
-        print 'not exists!!!!'
+        print('not exists!!!!')
         return v
     v_f_tmp = os.listdir(f_path)
     v_f = np.sort(v_f_tmp)
@@ -47,7 +47,7 @@ def get_c3d(f_path,ftype):
             [_,v_tmp] = read_c3d(os.path.join(f_path,v_ele))
             v.append(v_tmp)
     v = np.array(v)
-    print np.shape(v)
+    print(np.shape(v))
     return v
 
 
@@ -67,7 +67,7 @@ def check_HL_nonHL_exist(label):
 
 
 def generate_h5py(X, y, q, fname, dataset, feature_folder_name, batch_start = 0):
-    print 'generate_h5py'
+    print('generate_h5py')
     dirname = os.path.join(h5py_path, feature_folder_name)
     if not os.path.exists(dirname):
         os.makedirs(dirname)
@@ -78,7 +78,7 @@ def generate_h5py(X, y, q, fname, dataset, feature_folder_name, batch_start = 0)
         batch_num = int(num / BATCH_SIZE) + 1
     q_idx = 0
     f_txt = open(os.path.join(dirname, dataset + '.txt'), 'w') 
-    for i in xrange(batch_start, batch_start + batch_num): # every h5 file contains BATCH_SIZE videos
+    for i in range(batch_start, batch_start + batch_num): # every h5 file contains BATCH_SIZE videos
         train_filename = os.path.join(dirname, dataset + str(i) + '.h5') #each file is a mini-batch
         if os.path.isfile(train_filename):
             q_idx += BATCH_SIZE
@@ -92,7 +92,7 @@ def generate_h5py(X, y, q, fname, dataset, feature_folder_name, batch_start = 0)
             f['reindex'] = np.zeros(MAX_LEN)
             fname_tmp = []
             title_tmp = []
-            for j in xrange(BATCH_SIZE):
+            for j in range(BATCH_SIZE):
                 X_id = np.where(q == q_idx)[0]  # find the video segment features of video q_idx
                 #while(len(X_id) == 0 or not check_HL_nonHL_exist(y[X_id])):
                 while(len(X_id) == 0):
@@ -108,7 +108,7 @@ def generate_h5py(X, y, q, fname, dataset, feature_folder_name, batch_start = 0)
                         title_tmp = np.array(title_tmp)
                         f['fname'] = fname_tmp
                         f['title'] = title_tmp
-                        print train_filename
+                        print(train_filename)
                         f_txt.write(train_filename + '\n')
                         return
                 f['data'][:len(X_id),j,:] = X[X_id,:]
@@ -128,7 +128,7 @@ def generate_h5py(X, y, q, fname, dataset, feature_folder_name, batch_start = 0)
                     title_tmp = np.array(title_tmp)
                     f['fname'] = fname_tmp
                     f['title'] = title_tmp
-                    print train_filename
+                    print(train_filename)
                     f_txt.write(train_filename + '\n')
                     return
                 q_idx += 1
@@ -138,7 +138,7 @@ def generate_h5py(X, y, q, fname, dataset, feature_folder_name, batch_start = 0)
             title_tmp = np.array(title_tmp)
             f['fname'] = fname_tmp
             f['title'] = title_tmp
-        print train_filename
+        print(train_filename)
         f_txt.write(train_filename + '\n')
 
 
@@ -151,7 +151,7 @@ def get_feats_depend_on_label(label, per_f, v, idx):
     X = []  # feature
     y = []  # indicate if video is finished
     q = []  # idx is the index of video in train/test/val dataset, all the segment in video will be tagged as idx in list q
-    for l_index in xrange(len(label[0])):
+    for l_index in range(len(label[0])):
         low = int(label[0][l_index][0])
         up = int(label[0][l_index][1])+1
         up_ = up
@@ -174,13 +174,13 @@ def load_feats(files, dataset, feature = 'c3d'):
     fname = []
     idx = 0 # video index in the dataset 
     for ele in files: 
-        print ele, idx
+        print(ele, idx)
         index = ele.find('.')
         ele = ele[:index]
         l_path = os.path.join(label_path, ele + '.json')
         label = json.load(open(l_path))
         if len(label[0]) > MAX_LEN:
-            print 'exceed max_len!!!!!'
+            print('exceed max_len!!!!!')
             sys.exit(-6)
 
         f_path = os.path.join(feature_path, ele)
@@ -188,7 +188,7 @@ def load_feats(files, dataset, feature = 'c3d'):
             v = get_c3d(f_path,'fc6-1')
             per_f = 8
             if len(v) == 0:
-                print 'feature read null !!!!'
+                print('feature read null !!!!')
                 continue
             [x_tmp, y_tmp, q_tmp] = get_feats_depend_on_label(label, per_f, v, idx)
         elif feature == 'VGG':
@@ -203,7 +203,7 @@ def load_feats(files, dataset, feature = 'c3d'):
             v2 = get_VGG(os.path.join(feature_path,'VGG',ele),'fc6')
             per_f2 = 1
             if len(v1) == 0 or len(v2) == 0:
-                print "fuck!!"
+                print("fuck!!")
                 continue
             [x1_tmp, y1_tmp, q1_tmp] = get_feats_depend_on_label(label, per_f1, v1, idx)
             [x2_tmp, y2_tmp, q2_tmp] = get_feats_depend_on_label(label, per_f2, v2, idx)
@@ -258,7 +258,7 @@ def driver(inp_type, Rep_type, outp_folder_name):
 
 def getlist(path, split):
     List = glob.glob(path+split+'*.h5')
-    print path+split+'.txt'
+    print(path+split+'.txt')
     f = open(path+split+'.txt','w')
     for ele in List:
         f.write(ele+'\n')
@@ -271,5 +271,4 @@ if __name__ == '__main__':
     getlist(path,'train')
     getlist(path,'val')
     getlist(path,'test')
-
 
