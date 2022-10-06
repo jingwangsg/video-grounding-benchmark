@@ -1,16 +1,16 @@
 # video-grounding-benchmark
 
-| model  | lib      | note                                                               | time/epoch |
-| ------ | -------- | ------------------------------------------------------------------ | ---------- |
-| VSLNet | tf1.x    | to zh                                                              |            |
-| LPNet  | tf1.x    | to zh                                                              |            |
-| ABLR   | tf1.x    |                                                                    |            |
-| 2D-TAN | torch    |                                                                    |            |
-| MAN    | -        | -                                                                  | -          |
-| TALL   | tf0.x    | charades没有提供特征，需要自己抽特征<br />(用py3 tf1.x尝试跑通ing) |            |
-| SCDM   | tf1.x    |                                                                    |            |
-| RMW-RL | torch0.4 |                                                                    |            |
-| QSPN   | caffe    |                                                                    |            |
+| model  | lib      | dataset                                 | note | time/epoch |
+| ------ | -------- | --------------------------------------- | ---- | ---------- |
+| VSLNet | tf1.x    | all                                     |      |            |
+| LPNet  | tf1.x    | all                                     |      |            |
+| ABLR   | tf1.x    | anet<br />tacos                         |      |            |
+| 2D-TAN | torch    | all                                     |      |            |
+| MAN    | -        | -                                       |      |            |
+| TALL   | tf0.x    | tacos<br />charades(no feature offered) |      |            |
+| SCDM   | tf1.x    | all                                     |      |            |
+| RMW-RL | torch0.4 | charades                                |      |            |
+| QSPN   | caffe    | charades                                |      |            |
 
 All benchmarks run on TACoS Dataset
 
@@ -50,13 +50,3 @@ python3 extract_tacos_org.py --data_path <path to tacos annotation dataset>  \
       --save_dir <path to save extracted visual features>  \
       --sample_rate 64  # sliding windows
 ```
-
-# Experiment Result
-
-| model  | framework  | time/per epoch (batch size=16) |
-| ------ | ---------- | ------------------------------ |
-| VSLNet | tensorflow |                                |
-| LPNet  | tensorflow |                                |
-| 2D-TAN | pytorch    |                                |
-| TALL   | tensorflow |                                |
-|        |            |                                |
